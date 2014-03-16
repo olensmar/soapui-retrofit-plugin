@@ -147,19 +147,12 @@ class RetrofitGenerator {
 
                 // just one path parameter
                 if (ix == parts.length - 2) {
-                    if (parts[ix].endsWith("s") && parts[ix].length() > 1) {
-                        path = parts[ix].substring(0, parts[ix].length() - 1)
-                    } else {
-                        path = parts[ix] + "By" + namify(parts[ix + 1])
-                    }
+                     path = singularize(parts[ix]) + "By" + namify(parts[ix + 1])
                 }
                 // multiple path parameters
                 else if (ix < parts.length - 2) {
-                    path = parts[ix];
-                    if(path.endsWith("s") && path.length() > 1)
-                        path = path.substring(0, path.length() - 1)
 
-                    path += "By" + namify(parts[ix + 1])
+                    path = singularize( parts[ix]) + "By" + namify(parts[ix + 1])
 
                     while (ix < parts.length - 2) {
                         path += "And" + namify(parts[ix + 2])
@@ -215,6 +208,30 @@ class RetrofitGenerator {
         }
 
         return result
+    }
+
+
+    /**
+     * This obviously needs to be improved
+     */
+
+    boolean isPlural( String str )
+    {
+        return ( str.endsWith("s") && str.length() > 1)
+    }
+
+    /**
+     * and this as well...
+     */
+
+    String singularize( String str )
+    {
+        if( isPlural( str ))
+        {
+            str = str.substring( 0, str.length()-1)
+        }
+
+        return str
     }
 
     def startInterface(String packageName, String name) {
