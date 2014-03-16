@@ -35,6 +35,8 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
         if( dialog.show() )
         {
             RetrofitGenerator generator = new RetrofitGenerator( restService );
+            generator.setAsync( dialog.getBooleanValue( Form.ASYNC ));
+            generator.setUseResourceName( dialog.getBooleanValue( Form.USERESOURCENAME ));
             File file = generator.generate( dialog.getValue(Form.PACKAGE), dialog.getValue( Form.NAME), dialog.getValue(Form.FOLDER));
             if( file != null && file.exists() && UISupport.confirm("Open generated interface with system viewer", "Generate Retrofit Interface"))
             {
@@ -58,5 +60,11 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
         @AField( name = "Target Folder", description = "Where to save the interface", type = AField.AFieldType.FOLDER )
         public final static String FOLDER = "Target Folder";
+
+        @AField( name = "Generate Async", description = "Generate asynchronous method calls (using Callbacks)", type = AField.AFieldType.BOOLEAN )
+        public final static String ASYNC = "Generate Async";
+
+        @AField( name = "Use Resource Name", description =  "Use Resource names for method names when possible", type = AField.AFieldType.BOOLEAN)
+        public final static String USERESOURCENAME = "User Resource Name";
     }
 }
