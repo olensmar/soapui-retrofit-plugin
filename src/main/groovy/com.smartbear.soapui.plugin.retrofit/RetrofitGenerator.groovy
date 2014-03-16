@@ -15,6 +15,7 @@ class RetrofitGenerator {
     private Set<String> names = new HashSet<String>()
     private boolean async
     private boolean useResourceName
+    private boolean prefixMethodName
 
     public RetrofitGenerator(RestService restService) {
         this.restService = restService
@@ -25,6 +26,9 @@ class RetrofitGenerator {
     }
 
     public File generate(String packageName, String name, String folder) {
+        names.clear()
+        names.addAll( javaKeywords )
+
         def w = new StringWriter()
         writer = w.newPrintWriter()
 
@@ -59,26 +63,28 @@ class RetrofitGenerator {
 
         method.overlayParams.each {
             RestParameter p = it.value
+            def paramName = makeParameterName(p.name)
+
             switch (p.style) {
                 case RestParamsPropertyHolder.ParameterStyle.TEMPLATE:
                     if (signature.length() > 0)
                         signature += ", "
 
-                    signature += "@Path(\"" + p.name + "\") String " + p.name + " "
+                    signature += "@Path(\"" + p.name + "\") String " + paramName + " "
                     break
 
                 case RestParamsPropertyHolder.ParameterStyle.QUERY:
                     if (signature.length() > 0)
                         signature += ", "
 
-                    signature += "@Query(\"" + p.name + "\") String " + p.name + " "
+                    signature += "@Query(\"" + p.name + "\") String " + paramName + " "
                     break
 
                 case RestParamsPropertyHolder.ParameterStyle.HEADER:
                     if (signature.length() > 0)
                         signature += ", "
 
-                    signature += "@Header(\"" + p.name + "\") String " + p.name + " "
+                    signature += "@Header(\"" + p.name + "\") String " + paramName + " "
                     break
             }
         }
@@ -104,18 +110,33 @@ class RetrofitGenerator {
         writer.println()
     }
 
+    def makeParameterName(String str) {
+
+        str = namify( str )
+        str = str.length() > 1 ? str.substring(0,1).toLowerCase() + str.substring(1) : str.toLowerCase()
+
+        if( javaKeywords.contains( str ))
+            str = "_" + str
+
+        return str
+    }
+
     def createNameForMethod(RestMethod restMethod) {
 
-        def name = useResourceName ? namify(restMethod.resource.name + restMethod.getMethod().name().toUpperCase()) : ""
+        def name = useResourceName ? namify( restMethod.resource.name ) : ""
+        def prefix = prefixMethodName ? restMethod.method.name().toLowerCase() : ""
 
-        if (name.length() == 0 || names.contains(name)) {
-            name = restMethod.method.name().toLowerCase()
+        if (name.length() == 0 || names.contains( prefix + name.toLowerCase())) {
+
+            name = ""
 
             def path = restMethod.resource.getFullPath(true)
 
             def parts = path.split("/");
+            def ix = -1
+
             if (parts.length > 0) {
-                int ix = parts.length - 1
+                ix = parts.length - 1
                 def part = parts[ix]
 
                 // find last path parameter
@@ -134,7 +155,12 @@ class RetrofitGenerator {
                 }
                 // multiple path parameters
                 else if (ix < parts.length - 2) {
-                    path = parts[ix] + "By" + namify(parts[ix + 1])
+                    path = parts[ix];
+                    if(path.endsWith("s") && path.length() > 1)
+                        path = path.substring(0, path.length() - 1)
+
+                    path += "By" + namify(parts[ix + 1])
+
                     while (ix < parts.length - 2) {
                         path += "And" + namify(parts[ix + 2])
                         ix++
@@ -146,23 +172,35 @@ class RetrofitGenerator {
 
             name += namify(path)
 
-            if (names.contains(name)) {
-                ix = 1
-                while (names.contains(name + "_" + ix))
-                    ix++
+            if (names.contains( prefix + name.toLowerCase())) {
 
-                name = name + "_" + ix
+                while( ix > 0 )
+                {
+                    ix--
+                    name = namify(parts[ix]) + name
+
+                    if( !names.contains( prefix + name.toLowerCase() ))
+                        break
+                }
+
+                if( names.contains( prefix + name.toLowerCase() ))
+                {
+                    def cnt = 1
+                    while (names.contains( prefix + (name + "_" + cnt).toLowerCase() ))
+                        cnt++
+
+                    name = name + "_" + cnt
+                }
             }
         }
 
-        if (Character.isUpperCase(name.charAt(0)))
-            name = Character.toLowerCase(name.charAt(0)) + name.substring(1)
+        name = prefix + name
+        names.add( name.toLowerCase())
 
-        names.add(name)
         return name
     }
 
-    String namify(String s) {
+    public static String namify(String s) {
         def result = ""
         def upperCase = true
 
@@ -200,4 +238,22 @@ class RetrofitGenerator {
     public void setUseResourceName(boolean useResourceName) {
         this.useResourceName = useResourceName;
     }
+
+    void setPrefix(boolean prefix) {
+        this.prefixMethodName = prefix
+    }
+
+    private static final Set<String> javaKeywords = new HashSet<String>(Arrays.asList(
+            "abstract",     "assert",        "boolean",      "break",           "byte",
+            "case",         "catch",         "char",         "class",           "const",
+            "continue",     "default",       "do",           "double",          "else",
+            "enum",         "extends",       "false",        "final",           "finally",
+            "float",        "for",           "goto",         "if",              "implements",
+            "import",       "instanceof",    "int",          "interface",       "long",
+            "native",       "new",           "null",         "package",         "private",
+            "protected",    "public",        "return",       "short",           "static",
+            "strictfp",     "super",         "switch",       "synchronized",    "this",
+            "throw",        "throws",        "transient",    "true",            "try",
+            "void",         "volatile",      "while"
+    ));
 }

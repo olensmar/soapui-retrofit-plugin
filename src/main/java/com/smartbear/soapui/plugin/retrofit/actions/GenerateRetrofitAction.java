@@ -30,13 +30,18 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
     @Override
     public void perform(RestService restService, Object o) {
         if( dialog == null )
+        {
             dialog = ADialogBuilder.buildDialog( Form.class );
+            dialog.setValue( Form.NAME, RetrofitGenerator.namify( restService.getName() ));
+            dialog.setBooleanValue( Form.PREFIX, true );
+        }
 
         if( dialog.show() )
         {
             RetrofitGenerator generator = new RetrofitGenerator( restService );
             generator.setAsync( dialog.getBooleanValue( Form.ASYNC ));
             generator.setUseResourceName( dialog.getBooleanValue( Form.USERESOURCENAME ));
+            generator.setPrefix( dialog.getBooleanValue( Form.PREFIX));
             File file = generator.generate( dialog.getValue(Form.PACKAGE), dialog.getValue( Form.NAME), dialog.getValue(Form.FOLDER));
             if( file != null && file.exists() && UISupport.confirm("Open generated interface with system viewer", "Generate Retrofit Interface"))
             {
@@ -60,6 +65,10 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
         @AField( name = "Target Folder", description = "Where to save the interface", type = AField.AFieldType.FOLDER )
         public final static String FOLDER = "Target Folder";
+
+        @AField( name = "Prefix Method Name", description = "Prefix generated Method names with HTTP VERB name", type = AField.AFieldType.BOOLEAN )
+        public final static String PREFIX = "Prefix Method Name";
+
 
         @AField( name = "Generate Async", description = "Generate asynchronous method calls (using Callbacks)", type = AField.AFieldType.BOOLEAN )
         public final static String ASYNC = "Generate Async";
