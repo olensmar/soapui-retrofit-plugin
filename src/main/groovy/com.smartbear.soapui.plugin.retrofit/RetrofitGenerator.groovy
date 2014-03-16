@@ -5,6 +5,7 @@ import com.eviware.soapui.impl.rest.RestMethod
 import com.eviware.soapui.impl.rest.RestService
 import com.eviware.soapui.impl.rest.support.RestParameter
 import com.eviware.soapui.impl.rest.support.RestParamsPropertyHolder
+import org.modeshape.common.text.Inflector
 
 /**
  * Created by ole on 14/03/14.
@@ -17,6 +18,7 @@ class RetrofitGenerator {
     private boolean async
     private boolean useResourceName
     private boolean prefixMethodName
+    private Inflector inflector = new Inflector()
 
     public RetrofitGenerator(RestService restService) {
         this.restService = restService
@@ -124,6 +126,7 @@ class RetrofitGenerator {
 
     def createNameForMethod(RestMethod restMethod) {
 
+
         def name = useResourceName ? namify( restMethod.resource.name ) : ""
         def prefix = prefixMethodName ? restMethod.method.name().toLowerCase() : ""
 
@@ -148,12 +151,12 @@ class RetrofitGenerator {
 
                 // just one path parameter
                 if (ix == parts.length - 2) {
-                     path = singularize(parts[ix]) + "By" + namify(parts[ix + 1])
+                     path = inflector.singularize( namify(parts[ix])) + "By" + namify(parts[ix + 1])
                 }
                 // multiple path parameters
                 else if (ix < parts.length - 2) {
 
-                    path = singularize( parts[ix]) + "By" + namify(parts[ix + 1])
+                    path = inflector.singularize( namify(parts[ix])) + "By" + namify(parts[ix + 1])
 
                     while (ix < parts.length - 2) {
                         path += "And" + namify(parts[ix + 2])
@@ -209,30 +212,6 @@ class RetrofitGenerator {
         }
 
         return result
-    }
-
-
-    /**
-     * This obviously needs to be improved
-     */
-
-    boolean isPlural( String str )
-    {
-        return ( str.endsWith("s") && str.length() > 1)
-    }
-
-    /**
-     * and this as well...
-     */
-
-    String singularize( String str )
-    {
-        if( isPlural( str ))
-        {
-            str = str.substring( 0, str.length()-1)
-        }
-
-        return str
     }
 
     def startInterface(String packageName, String name) {

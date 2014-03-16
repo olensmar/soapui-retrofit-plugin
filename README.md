@@ -5,7 +5,13 @@ A SoapUI plugin that generates [Retrofit](http://square.github.io/retrofit/) Jav
 ## Installation
 
 Download the plugin from [sourceforge](https://sourceforge.net/projects/soapui-plugins/files/soapui-retrofit-plugin/)
-and copy it into your SoapUI installations /bin/plugins folder. Requires SoapUI 5.+
+and copy it into your SoapUI installation /bin/plugins folder.
+
+Download the [modeshape-common jar](http://mvnrepository.com/artifact/org.modeshape/modeshape-common) and copy it
+into your SoapUI installation /bin/ext folder
+
+Unfortunately this requires SoapUI 5.+ (due to some internal refactorings in SoapUI for that release), if you want a
+version for an older version of SoapUI let me know.
 
 ## Usage
 
@@ -36,8 +42,7 @@ it makes sense that is..).
 This is what I know of at this time:
 - Only works with raw responses since SoapUI doesn't have any schema information on response messages
 - No option to use the RxJava support in Retrofit for async calls
-- The method naming algorithm is very crude and will probably generate some strange names for plural nouns, etc.
-- Does not support form encoded and multipart requests yet
+- Does not support form encoded and multipart requests
 
 I'm sure there is more - please report bugs and issues here at GitHub
 
