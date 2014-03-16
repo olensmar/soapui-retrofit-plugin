@@ -9,6 +9,7 @@ import com.eviware.soapui.impl.rest.support.RestParamsPropertyHolder
 /**
  * Created by ole on 14/03/14.
  */
+
 class RetrofitGenerator {
     private RestService restService
     private PrintWriter writer
