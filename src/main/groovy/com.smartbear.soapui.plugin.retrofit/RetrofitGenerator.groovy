@@ -1,7 +1,8 @@
 package com.smartbear.soapui.plugin.retrofit
 
-import com.eviware.soapui.impl.rest.HttpMethod
 import com.eviware.soapui.impl.rest.RestMethod
+import com.eviware.soapui.impl.rest.RestRequestInterface
+import com.eviware.soapui.impl.rest.RestResource
 import com.eviware.soapui.impl.rest.RestService
 import com.eviware.soapui.impl.rest.support.RestParameter
 import com.eviware.soapui.impl.rest.support.RestParamsPropertyHolder
@@ -19,6 +20,7 @@ class RetrofitGenerator {
     private boolean useResourceName
     private boolean prefixMethodName
     private Inflector inflector = new Inflector()
+    private List<RestResource> resources
 
     public RetrofitGenerator(RestService restService) {
         this.restService = restService
@@ -39,8 +41,11 @@ class RetrofitGenerator {
 
         restService.allResources.each {
 
-            it.restMethodList.each {
-                addMethod(it)
+            if( resources == null || resources.empty || resources.contains( it )) {
+
+                it.restMethodList.each {
+                    addMethod(it)
+                }
             }
         }
 
@@ -92,7 +97,7 @@ class RetrofitGenerator {
             }
         }
 
-        if (method.getMethod() == HttpMethod.PUT || method.getMethod() == HttpMethod.POST) {
+        if (method.getMethod() == RestRequestInterface.HttpMethod.PUT || method.getMethod() == RestRequestInterface.HttpMethod.POST) {
             if (signature.length() > 0)
                 signature += ", "
 
@@ -253,4 +258,9 @@ class RetrofitGenerator {
             "throw",        "throws",        "transient",    "true",            "try",
             "void",         "volatile",      "while"
     ));
+
+    public void setResources ( List < RestResource > resources )
+    {
+        this.resources = resources;
+    }
 }

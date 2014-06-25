@@ -1,11 +1,16 @@
 package com.smartbear.soapui.plugin.retrofit.actions;
 
 import com.eviware.soapui.SoapUI;
+import com.eviware.soapui.impl.rest.RestResource;
 import com.eviware.soapui.impl.rest.RestService;
+import com.eviware.soapui.plugins.ActionConfiguration;
 import com.eviware.soapui.support.Tools;
 import com.eviware.soapui.support.UISupport;
 import com.eviware.soapui.support.action.support.AbstractSoapUIAction;
+import com.eviware.soapui.support.types.StringList;
+import com.eviware.soapui.support.types.StringToObjectMap;
 import com.eviware.x.form.XFormDialog;
+import com.eviware.x.form.XFormOptionsField;
 import com.eviware.x.form.support.ADialogBuilder;
 import com.eviware.x.form.support.AField;
 import com.eviware.x.form.support.AForm;
@@ -13,11 +18,14 @@ import com.smartbear.soapui.plugin.retrofit.RetrofitGenerator;
 
 import java.io.File;
 import java.net.MalformedURLException;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by ole on 16/01/14.
  */
 
+@ActionConfiguration( actionGroup = "RestServiceActions" )
 public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
     private XFormDialog dialog;
@@ -36,12 +44,39 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
             dialog.setBooleanValue( Form.PREFIX, true );
         }
 
+        XFormOptionsField resources = (XFormOptionsField) dialog.getFormField( Form.RESOURCES);
+        StringToObjectMap nameToResourceMap = new StringToObjectMap();
+        StringList names = new StringList();
+
+        for(RestResource resource : restService.getAllResources())
+        {
+            String fullPath = resource.getFullPath(false);
+            nameToResourceMap.put(fullPath, resource);
+            names.add(fullPath);
+        }
+
+        resources.setOptions( names.toStringArray() );
+        resources.setSelectedOptions( names.toStringArray() );
+
         if( dialog.show() )
         {
             RetrofitGenerator generator = new RetrofitGenerator( restService );
             generator.setAsync( dialog.getBooleanValue( Form.ASYNC ));
             generator.setUseResourceName( dialog.getBooleanValue( Form.USERESOURCENAME ));
             generator.setPrefix( dialog.getBooleanValue( Form.PREFIX));
+
+            List<RestResource> selectedResources = new ArrayList<RestResource>();
+
+            for( Object name : resources.getSelectedOptions())
+            {
+                RestResource e = (RestResource) nameToResourceMap.get(String.valueOf(name));
+                if( e != null )
+                    selectedResources.add(e);
+            }
+
+            if( !selectedResources.isEmpty() )
+                generator.setResources( selectedResources );
+
             File file = generator.generate( dialog.getValue(Form.PACKAGE), dialog.getValue( Form.NAME), dialog.getValue(Form.FOLDER));
             if( file != null && file.exists() && UISupport.confirm("Open generated interface with system viewer", "Generate Retrofit Interface"))
             {
@@ -57,6 +92,9 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
     @AForm( name = "Generate Retrofit Interface", description = "Generates a Retrofit Java Interface for this REST Service" )
     public interface Form
     {
+        @AField( name = "Resources", description = "Select which resources to include", type = AField.AFieldType.MULTILIST )
+        public final static String RESOURCES = "Resources";
+
         @AField( name = "Package", description = "The package name for the generated interface", type = AField.AFieldType.STRING )
         public final static String PACKAGE = "Package";
 
@@ -68,7 +106,6 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
         @AField( name = "Prefix Method Name", description = "Prefix generated Method names with HTTP VERB name", type = AField.AFieldType.BOOLEAN )
         public final static String PREFIX = "Prefix Method Name";
-
 
         @AField( name = "Generate Async", description = "Generate asynchronous method calls (using Callbacks)", type = AField.AFieldType.BOOLEAN )
         public final static String ASYNC = "Generate Async";
