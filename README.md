@@ -1,6 +1,6 @@
 ## soapui-retrofit-plugin
 
-A SoapUI plugin that generates [Retrofit](http://square.github.io/retrofit/) Java Interfaces for REST APIs defined in SoapUI.
+A Ready! API plugin that generates [Retrofit](http://square.github.io/retrofit/) Java Interfaces for REST APIs defined in SoapUI.
 
 ## Installation
 
@@ -28,7 +28,7 @@ documentation)
 - Use Resource Name : if selected the name of each method will be taken from the name of the Resource in SoapUI (and not
 generated from the resource path
 
-Together with the existing RAML and Swagger plugins - and with the REST Discovery functionality in SoapUI 5 - this plugin makes it
+Together with the existing RAML and Swagger plugins - and with the REST Discovery functionality in Ready! API - this plugin makes it
 extremely easy to generate java clients for more or less any REST API out there. Also - since the RAML plugin lets you browse the APIHub
 directory you can import any API from there and then generate a corresponding Retrofit interface.
 
@@ -52,4 +52,6 @@ This is a very simple plugin - it only has two classes:
 - [GenerateRetrofitAction](https://github.com/olensmar/soapui-retrofit-plugin/tree/master/src/main/java/com/smartbear/soapui/plugin/retrofit/actions) : the action class that shows the dialog (Java)
 - [RetrofitGenerator](https://github.com/olensmar/soapui-retrofit-plugin/tree/master/src/main/groovy/com.smartbear.soapui.plugin.retrofit/RetrofitGenerator.groovy) : the class that does the actual generation (Groovy)
 
-Feel free to suggest improvements
+Feel free to suggest improvements!
+
+/Ole

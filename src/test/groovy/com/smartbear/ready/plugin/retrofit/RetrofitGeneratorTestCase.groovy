@@ -1,4 +1,4 @@
-package com.smartbear.soapui.plugin.retrofit
+package com.smartbear.ready.plugin.retrofit
 
 import com.eviware.soapui.impl.rest.RestService
 import com.eviware.soapui.impl.rest.RestServiceFactory

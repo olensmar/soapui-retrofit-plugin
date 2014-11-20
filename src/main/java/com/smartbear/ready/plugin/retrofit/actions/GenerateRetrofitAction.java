@@ -1,10 +1,10 @@
-package com.smartbear.soapui.plugin.retrofit.actions;
+package com.smartbear.ready.plugin.retrofit.actions;
 
 import com.eviware.soapui.SoapUI;
 import com.eviware.soapui.impl.rest.RestResource;
 import com.eviware.soapui.impl.rest.RestService;
 import com.eviware.soapui.plugins.ActionConfiguration;
-import com.eviware.soapui.support.Tools;
+import com.eviware.soapui.support.SoapUITools;
 import com.eviware.soapui.support.UISupport;
 import com.eviware.soapui.support.action.support.AbstractSoapUIAction;
 import com.eviware.soapui.support.types.StringList;
@@ -14,16 +14,12 @@ import com.eviware.x.form.XFormOptionsField;
 import com.eviware.x.form.support.ADialogBuilder;
 import com.eviware.x.form.support.AField;
 import com.eviware.x.form.support.AForm;
-import com.smartbear.soapui.plugin.retrofit.RetrofitGenerator;
+import com.smartbear.ready.plugin.retrofit.RetrofitGenerator;
 
 import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.List;
-
-/**
- * Created by ole on 16/01/14.
- */
 
 @ActionConfiguration( actionGroup = "RestServiceActions" )
 public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
@@ -32,7 +28,7 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
     public GenerateRetrofitAction()
     {
-        super( "Generate Retrofit Interface", "Generates a Retrofit Java Interface for this REST Service");
+        super( "Generate Retrofit Interface", "Generates a Retrofit Java Interface for this REST API");
     }
 
     @Override
@@ -81,7 +77,7 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
             if( file != null && file.exists() && UISupport.confirm("Open generated interface with system viewer", "Generate Retrofit Interface"))
             {
                 try {
-                    Tools.openURL( file.toURI().toURL().toString() );
+                    SoapUITools.openURL(file.toURI().toURL().toString());
                 } catch (MalformedURLException e) {
                     SoapUI.logError(e);
                 }

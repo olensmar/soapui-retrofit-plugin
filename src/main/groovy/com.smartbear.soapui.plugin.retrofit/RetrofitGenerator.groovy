@@ -1,4 +1,4 @@
-package com.smartbear.soapui.plugin.retrofit
+package com.smartbear.ready.plugin.retrofit
 
 import com.eviware.soapui.impl.rest.RestMethod
 import com.eviware.soapui.impl.rest.RestRequestInterface
@@ -231,7 +231,7 @@ class RetrofitGenerator {
 
         writer.println()
         writer.println("/**")
-        writer.println(" * Generated with SoapUI Retrofit Plugin")
+        writer.println(" * Generated with Ready! API Retrofit Plugin")
         writer.println(" **/")
         writer.println()
         writer.println("public interface $name {")
