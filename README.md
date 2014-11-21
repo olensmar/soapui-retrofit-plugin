@@ -1,6 +1,7 @@
 ## soapui-retrofit-plugin
 
-A Ready! API plugin that generates [Retrofit](http://square.github.io/retrofit/) Java Interfaces for REST APIs defined in SoapUI.
+A Ready! API plugin that generates [Retrofit](http://square.github.io/retrofit/) Java Interfaces for REST APIs defined 
+in SoapUI Pro / Ready! API.
 
 ## Installation
 
