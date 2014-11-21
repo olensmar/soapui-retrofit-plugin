@@ -14,6 +14,8 @@ import com.eviware.x.form.XFormOptionsField;
 import com.eviware.x.form.support.ADialogBuilder;
 import com.eviware.x.form.support.AField;
 import com.eviware.x.form.support.AForm;
+import com.smartbear.analytics.Analytics;
+import com.smartbear.analytics.AnalyticsManager;
 import com.smartbear.ready.plugin.retrofit.RetrofitGenerator;
 
 import java.io.File;
@@ -82,6 +84,8 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
                     SoapUI.logError(e);
                 }
             }
+
+            Analytics.trackAction(AnalyticsManager.Category.CUSTOM_PLUGIN_ACTION, "GenerateRetrofitInterface");
         }
     }
 
