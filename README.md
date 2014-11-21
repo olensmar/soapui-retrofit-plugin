@@ -4,14 +4,7 @@ A Ready! API plugin that generates [Retrofit](http://square.github.io/retrofit/)
 
 ## Installation
 
-Download the plugin from [sourceforge](https://sourceforge.net/projects/soapui-plugins/files/soapui-retrofit-plugin/)
-and copy it into your SoapUI installation /bin/plugins folder.
-
-Download the [modeshape-common jar](http://mvnrepository.com/artifact/org.modeshape/modeshape-common) and copy it
-into your SoapUI installation /bin/ext folder
-
-Unfortunately this requires SoapUI 5.+ (due to some internal refactorings in SoapUI for that release), if you want a
-version for an older version of SoapUI let me know.
+Download the plugin from Plugin Repository from the Plugin Manager inside SoapUI Pro 5.1.X or Ready! API 1.X.
 
 ## Usage
 
