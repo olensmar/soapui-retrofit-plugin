@@ -19,6 +19,7 @@ class RetrofitGenerator {
     private boolean async
     private boolean useResourceName
     private boolean prefixMethodName
+    private boolean ignoreHeaders
     private Inflector inflector = new Inflector()
     private List<RestResource> resources
 
@@ -89,6 +90,9 @@ class RetrofitGenerator {
                     break
 
                 case RestParamsPropertyHolder.ParameterStyle.HEADER:
+                    if( ignoreHeaders )
+                        break
+
                     if (signature.length() > 0)
                         signature += ", "
 
@@ -262,5 +266,9 @@ class RetrofitGenerator {
     public void setResources ( List < RestResource > resources )
     {
         this.resources = resources;
+    }
+
+    void setIgnoreHeaders(boolean booleanValue) {
+        this.ignoreHeaders = booleanValue
     }
 }

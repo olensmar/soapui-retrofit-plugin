@@ -1,7 +1,8 @@
 ## soapui-retrofit-plugin
 
 A Ready! API plugin that generates [Retrofit](http://square.github.io/retrofit/) Java Interfaces for REST APIs defined 
-in SoapUI Pro / Ready! API.
+in SoapUI Pro / Ready! API. Ready the [blog-post](http://olensmar.blogspot.com/2014/11/a-ready-api-soapui-pro-retrofit-plugin.html)
+to get an more detailed walk through with screenshots.
 
 ## Installation
 
@@ -17,6 +18,7 @@ your project - no matter how it was created - and use the generated interface wi
 - Name : the class name of the generated interface
 - Target Folder : where to write the generated interface
 - Prefix Method Name : if selected the name of a methods HTTP Verb will be prefixed to the method name
+- Ignore HTTP Parameters : if selected HTTP parameters are not added to generated interface
 - Generate Async : if selected the generated methods will use Callbacks instead of returning Response objects (see Retrofit
 documentation)
 - Use Resource Name : if selected the name of each method will be taken from the name of the Resource in SoapUI (and not
@@ -40,11 +42,10 @@ This is what I know of at this time:
 
 I'm sure there is more - please report bugs and issues here at GitHub
 
-## Source
+## Release History
 
-This is a very simple plugin - it only has two classes:
-- [GenerateRetrofitAction](https://github.com/olensmar/soapui-retrofit-plugin/tree/master/src/main/java/com/smartbear/soapui/plugin/retrofit/actions) : the action class that shows the dialog (Java)
-- [RetrofitGenerator](https://github.com/olensmar/soapui-retrofit-plugin/tree/master/src/main/groovy/com.smartbear.soapui.plugin.retrofit/RetrofitGenerator.groovy) : the class that does the actual generation (Groovy)
+- 2014-11-20 : 1.0 Initial release
+- 2014-11-21 : 1.0.1 Added option to ignore header parameters
 
 Feel free to suggest improvements!
 

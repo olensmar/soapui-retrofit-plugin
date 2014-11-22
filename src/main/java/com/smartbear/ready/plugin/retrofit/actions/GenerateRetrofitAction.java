@@ -62,6 +62,7 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
             generator.setAsync( dialog.getBooleanValue( Form.ASYNC ));
             generator.setUseResourceName( dialog.getBooleanValue( Form.USERESOURCENAME ));
             generator.setPrefix( dialog.getBooleanValue( Form.PREFIX));
+            generator.setIgnoreHeaders( dialog.getBooleanValue(Form.IGNORE_HEADERS));
 
             List<RestResource> selectedResources = new ArrayList<RestResource>();
 
@@ -106,6 +107,9 @@ public class GenerateRetrofitAction extends AbstractSoapUIAction<RestService> {
 
         @AField( name = "Prefix Method Name", description = "Prefix generated Method names with HTTP VERB name", type = AField.AFieldType.BOOLEAN )
         public final static String PREFIX = "Prefix Method Name";
+
+        @AField( name = "Ignore header parameters", description = "Ignores HTTP Header parameters when generating methods", type = AField.AFieldType.BOOLEAN )
+        public final static String IGNORE_HEADERS = "Ignore header parameters";
 
         @AField( name = "Generate Async", description = "Generate asynchronous method calls (using Callbacks)", type = AField.AFieldType.BOOLEAN )
         public final static String ASYNC = "Generate Async";

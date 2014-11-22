@@ -6,7 +6,7 @@
 
     <groupId>com.smartbear</groupId>
     <artifactId>soapui-retrofit-plugin</artifactId>
-    <version>1.0</version>
+    <version>1.0.1</version>
 
     <name>SoapUI Retrofit Plugin</name>
 
